@@ -56,9 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
   stopWriteButton.addEventListener("click", (event) => {
     event.preventDefault();
     sendCommand("/stopWrite");
-    
+
     // CSS for transition
     container.classList.remove("active");
+
+    // Clear old values
+    document.getElementById("newData").value = "";
   });
 
   writeDataButton.addEventListener("click", async function (event) {
@@ -66,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const data = document.getElementById("newData").value;
     const url = "/newWrite/" + encodeURIComponent(data);
     await sendCommand(url);
+    window.alert("Data modified")
   });
 
   async function getReadData() {
