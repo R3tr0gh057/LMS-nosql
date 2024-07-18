@@ -232,7 +232,6 @@ body {
 }
 
 .toggle-wrapper span {
-  margin-left: 10px;
   font-size: 14px;
   color: var(--grey);
 }
