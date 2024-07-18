@@ -23,10 +23,22 @@
       </div>
       <div class="form-container data-read">
         <form>
+
+          <!-- Read UID & Data section  -->
           <h1>Tap The Card</h1>
           <span>Click on start reading and tap your rfid card</span>
           <input id="cardUID" placeholder="UID of the Card" />
           <input id="cardData" placeholder="Data on the Card" />
+
+          <!-- Keystroke Toggle -->
+          <div class="toggle-wrapper">
+            <label class="switch">
+              <input type="checkbox" id="keystrokeToggle">
+              <span class="slider round"></span>
+            </label>
+            <span>Keystroke mode</span>
+          </div>
+          
           <button class="Read" id="startRead">Start Reading</button>
         </form>
       </div>
@@ -39,6 +51,8 @@
             </p>
             <button class="hidden" id="stopWrite">Read Data</button>
           </div>
+
+          <!-- Write data section -->
           <div class="toggle-panel toggle-right">
             <h1>Data Reading Page</h1>
             <p>The UID of the Card you scan and the Data on it will be filled in these fields</p>

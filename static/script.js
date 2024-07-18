@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   setInterval(getReadData, 500);
+
   // // Sending command to start reading at startup 
   // sendCommand("/startRead");
 });
