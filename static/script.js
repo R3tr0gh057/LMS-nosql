@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
   const startReadButton = document.getElementById("startRead");
+  const keystrokeToggleButton = document.getElementById("keystrokeToggle");
   const stopReadButton = document.getElementById("stopRead");
   // const startWriteButton = document.getElementById("startWrite");
   const writeDataButton = document.getElementById("writeData");
   const stopWriteButton = document.getElementById("stopWrite");
   const container = document.getElementById("container");
+
+  let status = 0;
 
   // Universal function to fetch endpoints
   async function sendCommand(url) {
@@ -70,6 +73,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const url = "/newWrite/" + encodeURIComponent(data);
     await sendCommand(url);
     window.alert("Data modified")
+  });
+
+  // Keystroke toggle endpoint call
+  keystrokeToggleButton.addEventListener("click", async function (event) {
+    event.preventDefault();
+    status = !status;
+    const url = "/keystrokeMode/" + encodeURIComponent(status ? 1 : 0);
+    console.log("Sent " + url);
+    await sendCommand(url);
   });
 
   async function getReadData() {

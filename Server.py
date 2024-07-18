@@ -1,6 +1,8 @@
 from flask import Flask, render_template, jsonify, request
 import serial
 import threading
+import time
+import pyautogui
 
 app = Flask(__name__)
 
@@ -12,6 +14,9 @@ stop_write_command = ":"
 # Global variables to store the last read UID and data
 last_read_data = ""
 last_read_uid = ""
+
+# Global variables to store keystroke status
+keystrokeStatus = False
 
 try:
     ser = serial.Serial('COM5', 115200, timeout=1)
@@ -25,6 +30,19 @@ def serial_write(command):
     if ser:
         ser.write(command.encode())
         print(f"Command sent to serial: {command}")
+
+# Function to write data as keystrokes
+def keystroke_function():
+    global keystrokeStatus
+    while keystrokeStatus:
+        try:
+            if ser.in_waiting > 0:
+                time.sleep(0.5)
+                pyautogui.typewrite(last_read_uid)
+                pyautogui.press('enter')
+                print(f"Writing data: {last_read_uid}")
+        except Exception as e:
+            print(f"Exception occurred: {e}")
 
 # Function to read data from the serial port
 def read_from_serial():
@@ -123,6 +141,18 @@ def newWrite(data):
 @app.route('/getReadData')
 def getReadData():
     return jsonify({'uid': last_read_uid, 'data': last_read_data})
+
+# Endpoint to start keystroke function
+@app.route('/keystrokeMode/<int:data>', methods=['POST'])
+def keystrokeMode(data):
+    global keystrokeStatus
+
+    keystrokeStatus = bool(data)
+    print(f"Keystroke function {'started' if keystrokeStatus else 'stopped'}, status: {keystrokeStatus}")
+    
+    if keystrokeStatus:
+        threading.Thread(target=keystroke_function).start()
+    return jsonify({'status': 'received'})
 
 if __name__ == '__main__':
     app.run()
