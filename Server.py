@@ -38,9 +38,9 @@ def keystroke_function():
         try:
             if ser.in_waiting > 0:
                 time.sleep(0.5)
-                pyautogui.typewrite(last_read_uid)
+                pyautogui.typewrite(last_read_data)
                 pyautogui.press('enter')
-                print(f"Writing data: {last_read_uid}")
+                print(f"Writing data: {last_read_data}")
         except Exception as e:
             print(f"Exception occurred: {e}")
 
