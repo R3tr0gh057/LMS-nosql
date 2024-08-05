@@ -3,6 +3,7 @@ import serial
 import threading
 import time
 import pyautogui
+import serial.tools.list_ports
 
 app = Flask(__name__)
 
@@ -24,6 +25,29 @@ try:
 except serial.SerialException as e:
     ser = None
     print(f"Failed to connect to serial port: {e}")
+
+# # Function to find available serial ports
+# def find_serial_port():
+#     ports = list(serial.tools.list_ports.comports())
+#     if not ports:
+#         print("No serial ports found.")
+#         return None
+#     for port in ports:
+#         try:
+#             ser = serial.Serial(port.device, 9600, timeout=1)
+#             print(f"Connected to serial port: {port.device}")
+#             return ser
+#         except serial.SerialException as e:
+#             print(f"Failed to connect to {port.device}: {e}")
+#     print("Could not connect to any serial port.")
+#     return None
+
+# # Automatically select and connect to a serial port
+# ser = find_serial_port()
+# if ser:
+#     print("Serial port connected.")
+# else:
+#     print("No serial port connected.")
 
 # Serial write function to send commands to the serial port
 def serial_write(command):

@@ -281,3 +281,17 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(14px);
 }
+
+/* DROP DOWN MENU */
+select{
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  border:none;
+  padding: 10px 20px;
+  border-radius:5px;
+}
+
+select:focus{
+  outline:none;
+}
