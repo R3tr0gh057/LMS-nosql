@@ -19,7 +19,7 @@ last_read_uid = ""
 keystrokeStatus = False
 
 try:
-    ser = serial.Serial('COM5', 115200, timeout=1)
+    ser = serial.Serial('COM7', 9600, timeout=1)
     print("Serial port connected.")
 except serial.SerialException as e:
     ser = None
@@ -66,6 +66,8 @@ def read_from_serial():
                 UID = ser.readline().strip().decode('utf-8')
                 if any(flag_str in UID for flag_str in flag):
                     continue
+                elif UID == "MIFARE_Read() failed: The CRC_A does not match.":
+                    continue
                 else:
                     last_read_uid = UID
                     print(f"Read UID: {last_read_uid}")
@@ -73,6 +75,8 @@ def read_from_serial():
                 # Read Data
                 Data = ser.readline().strip().decode('utf-8')
                 if any(flag_str in Data for flag_str in flag):
+                    continue
+                elif Data == "MIFARE_Read() failed: The CRC_A does not match.":
                     continue
                 else:
                     last_read_data = Data
