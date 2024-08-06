@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const startReadButton = document.getElementById("startRead");
+  const serialSelectBtn = document.getElementById("SerialSelector");
   const keystrokeToggleButton = document.getElementById("keystrokeToggle");
   const stopReadButton = document.getElementById("stopRead");
   const haltReadButton = document.getElementById("stopReading");
@@ -25,6 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error:", error);
     }
   }
+
+  // Serial port selector
+  serialSelectBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    connectSerialPort();
+  });
 
   startReadButton.addEventListener("click", async (event) => {
     event.preventDefault();
@@ -121,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch("/getReadData");
       const result = await response.json();
-      if (result.uid == "PCD_Authenticate() failed: Error in communication." || result.uid == "PCD_Authenticate() failed: Timeout in communication." || result.uid == "MIFARE_Read() failed: The CRC_A does not match."){
+      if (result.uid == "PCD_Authenticate() failed: Error in communication." || result.uid == "PCD_Authenticate() failed: Timeout in communication." || result.uid == "MIFARE_Read() failed: The CRC_A does not match.") {
         document.getElementById("cardUID").value = "Try again";
         await sendCommand("/startRead");
       }
@@ -135,6 +142,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function loadPorts() {
+    fetch('/ports')
+      .then(response => response.json())
+      .then(data => {
+        const portSelect = document.getElementById('port');
+        portSelect.innerHTML = '';
+        data.ports.forEach(port => {
+          const option = document.createElement('option');
+          option.value = port;
+          option.text = port;
+          portSelect.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching ports:', error);
+      });
+  }
+
+  function connectSerialPort() {
+    const selectedPort = document.getElementById('port').value;
+    fetch('/connect', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ port: selectedPort }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Connected to ' + selectedPort);
+        } else {
+          alert('Failed to connect: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  loadPorts()
   setInterval(getReadData, 500);
 
   // // Sending command to start reading at startup

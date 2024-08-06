@@ -6,6 +6,7 @@ import pyautogui
 import serial.tools.list_ports
 
 app = Flask(__name__)
+ser = None
 
 read_command = "-"
 stop_read_command = "_"
@@ -19,12 +20,15 @@ last_read_uid = ""
 # Global variables to store keystroke status
 keystrokeStatus = False
 
-try:
-    ser = serial.Serial('COM3', 9600, timeout=1)
-    print("Serial port connected.")
-except serial.SerialException as e:
-    ser = None
-    print(f"Failed to connect to serial port: {e}")
+
+# try:
+#     ser = serial.Serial('COM3', 9600, timeout=1)
+#     print("Serial port connected.")
+# except serial.SerialException as e:
+#     ser = None
+#     print(f"Failed to connect to serial port: {e}")
+
+
 
 # # Function to find available serial ports
 # def find_serial_port():
@@ -109,6 +113,18 @@ def read_from_serial():
             except UnicodeDecodeError:
                 print("Failed to decode RFID tag")
 
+# Function to keep the serial connection alive
+def maintain_serial_connection():
+    global ser
+    while True:
+        if ser is not None:
+            try:
+                if not ser.is_open:
+                    ser.open()
+            except serial.SerialException as e:
+                print(f"Failed to maintain serial connection: {e}")
+        time.sleep(1)
+
 # Start a background thread to read RFID data if the serial port is available
 if ser is not None:
     thread = threading.Thread(target=read_from_serial)
@@ -119,6 +135,28 @@ if ser is not None:
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/ports', methods=['GET'])
+def list_ports():
+    ports = [port.device for port in serial.tools.list_ports.comports()]
+    return jsonify(ports=ports)
+
+@app.route('/connect', methods=['POST'])
+def connect():
+    global ser
+    data = request.get_json()
+    port = data.get('port')
+
+    if ser:
+        ser.close()
+
+    try:
+        print(f"Port started at {port}")
+        ser = serial.Serial(port, 9600, timeout=1)
+        threading.Thread(target=read_from_serial, daemon=True).start()
+        return jsonify(success=True)
+    except serial.SerialException as e:
+        return jsonify(success=False, error=str(e))
 
 @app.route('/startRead', methods=['POST'])
 def startRead():
