@@ -34,7 +34,7 @@ LMS-nosql is a database-free version of a Library Management System (LMS). It wr
      ```
    - Copy the link provided by the terminal and paste it into your web browser to access the application.
 
-## Possible Bugs
+## Note
 - Ensure the correct COM port is selected, the buttons are active only when the port is selected.
 - Verify that the RFID reader is properly connected.
 - Check the terminal for any error messages.
