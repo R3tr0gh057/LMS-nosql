@@ -33,6 +33,87 @@ body {
   height: 100vh;
 }
 
+.main{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.portselect {
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 400px;
+  padding: 20px;
+  max-width: 100%;
+  min-height: 480px;
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  
+}
+
+.portselect h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.portselect p {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.portselect .select {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -30%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  right: -15%;
+  margin-bottom: 20px;
+  width: 70%;
+  margin: 0 auto;
+
+}
+
+.portselect select {
+  position: relative;
+  background-color: var(--light);
+  color: var(--dark);
+  height: 40px;
+  margin-bottom: 10px;
+  align-items: center;
+  width: 70%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+
+.portselect button {
+  background-color: var(--primary);
+  color: var(--light);
+  font-size: 12px;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+
 .container {
   background-color: var(--dark);
   color: var(--grey);
