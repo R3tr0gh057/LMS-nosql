@@ -172,6 +172,12 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
+          // enable the buttons once the listener is established
+          document.getElementById("writeData").disabled = false;
+          document.getElementById("keystrokeToggle").disabled = false;
+          document.getElementById("startRead").disabled = false;
+          document.getElementById("stopReading").disabled = false;
+
           alert('Connected to ' + selectedPort);
         } else {
           alert('Failed to connect: ' + data.error);
