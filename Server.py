@@ -20,7 +20,7 @@ last_read_uid = ""
 keystrokeStatus = False
 
 try:
-    ser = serial.Serial('COM7', 9600, timeout=1)
+    ser = serial.Serial('COM3', 9600, timeout=1)
     print("Serial port connected.")
 except serial.SerialException as e:
     ser = None
