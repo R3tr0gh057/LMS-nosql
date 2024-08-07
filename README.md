@@ -13,6 +13,7 @@ LMS-nosql is a database-free version of a Library Management System (LMS). It wr
 1. **Install Drivers**:
    - Navigate to the `dependencies` folder.
    - Extract `CDM-v2.12.36.4-WHQL-Certified.zip` and navigate to `CDM-v2.12.36.4-WHQL-Certified` folder.
+   - Right click and click install on the two .inf files in the folder.
    - Install both drivers available in the folder.
 
 2. **Install Python**:
