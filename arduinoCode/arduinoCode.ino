@@ -92,9 +92,11 @@ void printData() {
       // Authenticate
       status = rfid.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, blockAddr, &key, &(rfid.uid));
       if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("PCD_Authenticate() failed: "));
-        Serial.println(rfid.GetStatusCodeName(status));
-        return;
+        // Serial.print(F("PCD_Authenticate() failed: "));
+        // Serial.println(rfid.GetStatusCodeName(status));
+        rfid.PICC_HaltA(); // Halt the card and continue reading
+        rfid.PCD_StopCrypto1();
+        continue;
       }
 
       // Read data from the block
@@ -103,17 +105,6 @@ void printData() {
         Serial.print(F("MIFARE_Read() failed: "));
         Serial.println(rfid.GetStatusCodeName(status));
       } else {
-
-        // Print UID in hex format
-        for (byte i = 0; i < rfid.uid.size; i++) {
-          if (rfid.uid.uidByte[i] < 0x10) {
-            Serial.print("0"); // Ensure two-digit hex output
-          }
-          Serial.print(rfid.uid.uidByte[i], HEX);
-          Serial.print(" ");
-        }
-        Serial.println();
-
         // Print data from the block
         String readData = "";
         for (byte i = 0; i < 16; i++) {
@@ -146,3 +137,4 @@ void printData() {
     }
   }
 }
+

@@ -128,12 +128,12 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch("/getReadData");
       const result = await response.json();
-      if (result.uid == "PCD_Authenticate() failed: Error in communication." || result.uid == "PCD_Authenticate() failed: Timeout in communication." || result.uid == "MIFARE_Read() failed: The CRC_A does not match.") {
+      if (result.data == "PCD_Authenticate() failed: Error in communication." || result.data == "PCD_Authenticate() failed: Timeout in communication." || result.data == "MIFARE_Read() failed: The CRC_A does not match.") {
         document.getElementById("cardUID").value = "Try again";
         await sendCommand("/startRead");
       }
       else {
-        document.getElementById("cardUID").value = result.uid;
+        // document.getElementById("cardUID").value = result.uid;
         document.getElementById("cardData").value = result.data;
       }
 

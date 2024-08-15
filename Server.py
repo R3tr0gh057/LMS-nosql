@@ -90,15 +90,15 @@ def read_from_serial():
     while True:
         if ser.in_waiting > 0:
             try:
-                # Read UID
-                UID = ser.readline().strip().decode('utf-8')
-                if any(flag_str in UID for flag_str in flag):
-                    continue
-                elif UID == "MIFARE_Read() failed: The CRC_A does not match.":
-                    continue
-                else:
-                    last_read_uid = UID
-                    print(f"Read UID: {last_read_uid}")
+                # # Read UID
+                # UID = ser.readline().strip().decode('utf-8')
+                # if any(flag_str in UID for flag_str in flag):
+                #     continue
+                # elif UID == "MIFARE_Read() failed: The CRC_A does not match.":
+                #     continue
+                # else:
+                #     last_read_uid = UID
+                #     print(f"Read UID: {last_read_uid}")
                 
                 # Read Data
                 Data = ser.readline().strip().decode('utf-8')
@@ -206,7 +206,8 @@ def newWrite(data):
 # Endpoint to get the last read data
 @app.route('/getReadData')
 def getReadData():
-    return jsonify({'uid': last_read_uid, 'data': last_read_data})
+    # return jsonify({'uid': last_read_uid, 'data': last_read_data})
+    return jsonify({'data': last_read_data})
 
 # Endpoint to start keystroke function
 @app.route('/keystrokeMode/<int:data>', methods=['POST'])
