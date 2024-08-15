@@ -178,6 +178,9 @@ document.addEventListener("DOMContentLoaded", function () {
           document.getElementById("startRead").disabled = false;
           document.getElementById("stopReading").disabled = false;
 
+          serialSelectBtn.classList.add("active");
+          serialSelectBtn.textContent = "Connected to "+selectedPort;
+
           alert('Connected to ' + selectedPort);
         } else {
           alert('Failed to connect: ' + data.error);
