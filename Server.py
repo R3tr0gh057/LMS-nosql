@@ -169,8 +169,10 @@ def startRead():
 
 @app.route('/stopRead', methods=['POST'])
 def stopRead():
+    global keystrokeStatus
     try:
         serial_write(stop_read_command)
+        keystrokeStatus = False
         return jsonify({'status': 'read stopped'})
     except Exception as e:
         print(f"Exception occurred while stopping read: {e}")
