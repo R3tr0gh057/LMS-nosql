@@ -20,57 +20,11 @@ last_read_uid = ""
 # Global variables to store keystroke status
 keystrokeStatus = False
 
-
-# try:
-#     ser = serial.Serial('COM3', 9600, timeout=1)
-#     print("Serial port connected.")
-# except serial.SerialException as e:
-#     ser = None
-#     print(f"Failed to connect to serial port: {e}")
-
-
-
-# # Function to find available serial ports
-# def find_serial_port():
-#     ports = list(serial.tools.list_ports.comports())
-#     if not ports:
-#         print("No serial ports found.")
-#         return None
-#     for port in ports:
-#         try:
-#             ser = serial.Serial(port.device, 9600, timeout=1)
-#             print(f"Connected to serial port: {port.device}")
-#             return ser
-#         except serial.SerialException as e:
-#             print(f"Failed to connect to {port.device}: {e}")
-#     print("Could not connect to any serial port.")
-#     return None
-
-# # Automatically select and connect to a serial port
-# ser = find_serial_port()
-# if ser:
-#     print("Serial port connected.")
-# else:
-#     print("No serial port connected.")
-
 # Serial write function to send commands to the serial port
 def serial_write(command):
     if ser:
         ser.write(command.encode())
         print(f"Command sent to serial: {command}")
-
-# Function to write data as keystrokes
-def keystroke_function():
-    global keystrokeStatus
-    while keystrokeStatus:
-        try:
-            if ser.in_waiting > 0:
-                time.sleep(0.5)
-                pyautogui.typewrite(last_read_data)
-                pyautogui.press('enter')
-                print(f"Writing data: {last_read_data}")
-        except Exception as e:
-            print(f"Exception occurred: {e}")
 
 # Function to read data from the serial port
 def read_from_serial():
@@ -90,16 +44,8 @@ def read_from_serial():
     while True:
         if ser.in_waiting > 0:
             try:
-                # # Read UID
-                # UID = ser.readline().strip().decode('utf-8')
-                # if any(flag_str in UID for flag_str in flag):
-                #     continue
-                # elif UID == "MIFARE_Read() failed: The CRC_A does not match.":
-                #     continue
-                # else:
-                #     last_read_uid = UID
-                #     print(f"Read UID: {last_read_uid}")
-                
+                # Clear last read data before reading new data
+                last_read_data = ""
                 # Read Data
                 Data = ser.readline().strip().decode('utf-8')
                 if any(flag_str in Data for flag_str in flag):
@@ -112,6 +58,21 @@ def read_from_serial():
 
             except UnicodeDecodeError:
                 print("Failed to decode RFID tag")
+
+# Function to write data as keystrokes
+def keystroke_function():
+    global keystrokeStatus
+    while keystrokeStatus:
+        try:
+            if ser.in_waiting > 0:
+                time.sleep(0.5)
+                pyautogui.typewrite(last_read_data)
+                pyautogui.press('enter')
+                print(f"Writing data: {last_read_data}")
+                # Clearing last read data to avoid merged data
+                last_read_data = ""
+        except Exception as e:
+            print(f"Exception occurred: {e}")
 
 # Function to keep the serial connection alive
 def maintain_serial_connection():
