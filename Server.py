@@ -45,7 +45,7 @@ def read_from_serial():
         if ser.in_waiting > 0:
             try:
                 # Clear last read data before reading new data
-                last_read_data = ""
+                # last_read_data = ""
                 # Read Data
                 Data = ser.readline().strip().decode('utf-8')
                 if any(flag_str in Data for flag_str in flag):
@@ -70,7 +70,7 @@ def keystroke_function():
                 pyautogui.press('enter')
                 print(f"Writing data: {last_read_data}")
                 # Clearing last read data to avoid merged data
-                last_read_data = ""
+                # last_read_data = ""
         except Exception as e:
             print(f"Exception occurred: {e}")
 
