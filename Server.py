@@ -70,7 +70,7 @@ def keystroke_function():
                 pyautogui.press('enter')
                 print(f"Writing data: {last_read_data}")
                 # Clearing last read data to avoid merged data
-                last_read_data = ""
+                # last_read_data = ""
         except Exception as e:
             print(f"Exception occurred: {e}")
 

@@ -108,14 +108,16 @@ void printData() {
         // Print data from the block
         String readData = "";
         for (byte i = 0; i < 16; i++) {
+          if (buffer[i] == '#' || buffer[i] == '$') {
+            break; // Stop reading when '#' or '$' is encountered
+          }
           if (buffer[i] >= 32 && buffer[i] <= 126) { // Only add printable characters
             readData += (char)buffer[i];
           }
         }
-        readData.replace("#", ""); // Remove delimiter
-
-        // Print Data
-        Serial.println(readData);
+        
+        Serial.println(readData); // Print the filtered data
+      }
 
         // Buzzer and LED indicators
         digitalWrite(INDICATOR, HIGH);
