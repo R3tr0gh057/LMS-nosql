@@ -68,7 +68,7 @@ def keystroke_function():
                 time.sleep(0.5)
                 pyautogui.typewrite(last_read_data)
                 pyautogui.press('enter')
-                print(f"Writing data: {last_read_data}")
+                print(f"Typed data: {last_read_data}")
                 # Clearing last read data to avoid merged data
                 # last_read_data = ""
         except Exception as e:
