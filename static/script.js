@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // CSS for transition
       startReadButton.classList.add("active");
       startReadButton.textContent = "Keystrokes active . . .";
+      startReadButton.disabled = true;
 
       // Fetching the keystroke trigger
       const url = "/keystrokeMode/" + encodeURIComponent(status ? 1 : 0);
@@ -63,6 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // CSS change for start reading button
     startReadButton.classList.remove("active");
     startReadButton.textContent = "Start Reading";
+    startReadButton.disabled = false;
+    
+    // Stop keystrokes if running
+    if (status) keystrokeToggleButton.click();
 
     // CSS for transition
     container.classList.add("active");
@@ -84,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
   haltReadButton.addEventListener("click", async (event) => {
     event.preventDefault();
     sendCommand("/stopRead");
+    startReadButton.disabled = false;
 
     // Delay to mitigate serial conflict
     await new Promise(r => setTimeout(r, 500));
