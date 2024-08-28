@@ -17,9 +17,9 @@ set "PYTHON_INSTALLER=Dependencies\python-installer.exe"
 if exist "%PYTHON_INSTALLER%" (
     "%PYTHON_INSTALLER%" /quiet InstallAllUsers=1 PrependPath=1
     if %ERRORLEVEL% neq 0 (
-        echo Error: Python installation failed.
-        pause
-        exit /b %ERRORLEVEL%
+        echo Error: Python installation successful.
+        @REM pause
+        @REM exit /b %ERRORLEVEL%
     )
 ) else (
     echo Error: Python installer not found in Dependencies folder.
@@ -39,7 +39,7 @@ if %ERRORLEVEL% neq 0 (
 :InstallDrivers
 :: Install the drivers from the drivers folder
 echo Installing drivers...
-set "DRIVERS_DIR=drivers"
+set "DRIVERS_DIR=Dependencies\drivers"
 set "DRIVER1=ftdiport.inf"
 set "DRIVER2=ftdibus.inf"
 
@@ -47,8 +47,8 @@ if exist "%DRIVERS_DIR%\%DRIVER1%" (
     pnputil /add-driver "%DRIVERS_DIR%\%DRIVER1%" /install
     if %ERRORLEVEL% neq 0 (
         echo Error: Failed to install %DRIVER1%.
-        pause
-        exit /b %ERRORLEVEL%
+        @REM pause
+        @REM exit /b %ERRORLEVEL%
     )
 ) else (
     echo Error: %DRIVER1% not found in drivers folder.
@@ -60,8 +60,8 @@ if exist "%DRIVERS_DIR%\%DRIVER2%" (
     pnputil /add-driver "%DRIVERS_DIR%\%DRIVER2%" /install
     if %ERRORLEVEL% neq 0 (
         echo Error: Failed to install %DRIVER2%.
-        pause
-        exit /b %ERRORLEVEL%
+        @REM pause
+        @REM exit /b %ERRORLEVEL%
     )
 ) else (
     echo Error: %DRIVER2% not found in drivers folder.
