@@ -14,6 +14,13 @@
   --light-warning: #fff2c6;
   --success: #005678;
   --light-success: #bbf7d0;
+  --new-primary: #e86705;
+  --new-light-primary: #f8b26a;
+  --new-success: #05d9e8;
+  --old-primary: #005678;
+  --old-light-primary: #05d9e8;
+  --old-success: #005678;
+  transition: --primary 0.5s 0.2s cubic-bezier(0.4, 0, 0.2, 1), --light-primary 0.5s 0.2s ease-in-out, --success 0.5s 0.2s ease-in-out;
 }
 
 * {
@@ -31,6 +38,28 @@ body {
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+}
+
+/* update colors when book is selected */
+.mainselect option[value="Book"]:checked ~ .port {
+  --primary: var(--new-primary);
+  --light-primary: var(--new-light-primary);
+  --success: var(--new-success);
+}
+
+
+.mainselect {
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  padding: 14px;
+  margin: 10px 10px;
+  z-index: 20;
+  top: 20%;
+  left: 0%;
 }
 
 .main{
@@ -70,7 +99,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  top: -30%;
+  top: -33%;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -79,6 +108,15 @@ body {
   width: 70%;
   margin: 0 auto;
 
+}
+
+.text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 90px;
 }
 
 .portselect select {
@@ -98,6 +136,25 @@ body {
   text-transform: uppercase;
 }
 
+.port{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 20px
+}
+
+.port p {
+  text-align: center;
+  margin-bottom: 20px;
+  top: 54px;
+  position: relative;
+  right: 49px;
+
+
+
+}
 
 .portselect button {
   background-color: var(--primary);

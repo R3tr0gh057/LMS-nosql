@@ -17,12 +17,21 @@
           <p>Identify the port from device manager and select the port</p>  
         </div>
         <div class="select">
-          <select name="port" id="port"></select>
+          <div class="port">
+            <p>ID card COM Port</p> 
+            <select name="port" id="port"></select>
+          </div>
         </div>
-        <button id="SerialSelector" class="serialStatus">Connect</button>
+        <button id="SerialSelector" class="serialStatus">Connect ID Port</button>
         </div>
     
         <div class="container" id="container">
+          <div>
+            <select class="mainselect">
+              <option value="ID Card" selected="selected">ID Card</option>
+              <option value="Book">Book</option>
+            </select>
+          </div>
           <div class="form-container data-write">
             <form>
               <h1>Place The Card</h1>
@@ -76,5 +85,47 @@
     </div>
     <!-- <script src="{{url_for('static', filename='script.js')}}"></script> -->
      <script src="../static/script.js"></script>
+     <script>
+      // Get the mainselect dropdown and the p tag in the port class
+      const mainSelect = document.querySelector('.mainselect');
+      const portText = document.querySelector('.port p');
+      const portBtn = document.querySelector('.serialStatus');
+
+      // Add an event listener to the mainselect dropdown
+      mainSelect.addEventListener('change', (e) => {
+        // Get the selected value
+        const selectedValue = e.target.value;
+
+        // Update the text of the p tag in the port class
+        if (selectedValue === 'Book') {
+          portText.textContent = 'Book COM Port';
+          portBtn.textContent = 'Connect Book Port';
+        } else {
+          portText.textContent = 'ID card COM Port';
+          portBtn.textContent = 'Connect ID Port';
+        }
+      });
+     </script>
+     <script>      
+        // Add an event listener to the mainselect dropdown
+        mainSelect.addEventListener('change', (e) => {
+          // Get the selected value
+          const selectedValue = e.target.value;
+
+          // Update the colors when book is selected
+          if (selectedValue === 'Book') {
+            document.documentElement.style.setProperty('--primary', 'var(--new-primary)');
+            document.documentElement.style.setProperty('--light-primary', 'var(--new-light-primary)');
+            document.documentElement.style.setProperty('--success', 'var(--new-success)');
+          } 
+          
+          else if (selectedValue === 'ID Card') {
+            document.documentElement.style.setProperty('--primary', 'var(--old-primary)');
+            document.documentElement.style.setProperty('--light-primary', 'var(--old-light-primary)');
+            document.documentElement.style.setProperty('--success', 'var(--old-success)');
+          }
+
+        });
+     </script>
   </body>
 </html>
