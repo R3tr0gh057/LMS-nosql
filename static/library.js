@@ -48,13 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('/ports')
       .then(response => response.json())
       .then(data => {
-        const portSelect = document.getElementById('port');
-        portSelect.innerHTML = '';
+        const idport = document.getElementById('IDport');
+        idport.innerHTML = '';
+
+        const bookport = document.getElementById('BookPort');
+        bookport.innerHTML = '';
+
         data.ports.forEach(port => {
           const option = document.createElement('option');
           option.value = port;
           option.text = port;
-          portSelect.appendChild(option);
+          idport.appendChild(option);
+        });
+
+        data.ports.forEach(port => {
+          const option = document.createElement('option');
+          option.value = port;
+          option.text = port;
+          bookport.appendChild(option);
         });
       })
       .catch(error => {
@@ -120,4 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault()
     sendCommand("/startLibraryKeystroke/0")
   });
+
+  loadPorts()
+  setInterval(getReadData, 500);
 });
