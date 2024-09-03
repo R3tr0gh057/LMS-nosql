@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const connectCOM = document.getElementById("connectCOM");
   const disconnectCOM = document.getElementById("disconnectCOM");
 
+  ////////////////////////////
+  // FUNCTION DEFINITIONS
+  ////////////////////////////
+
   // Universal function to fetch endpoints
   async function sendCommand(url) {
     try {
@@ -23,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Update read data function call
   async function getReadData() {
     try {
-      const response = await fetch("/getReadData");
+      const response = await fetch("/LibraryGetReadData");
       const result = await response.json();
       if (result.data == "PCD_Authenticate() failed: Error in communication." || result.data == "PCD_Authenticate() failed: Timeout in communication." || result.data == "MIFARE_Read() failed: The CRC_A does not match.") {
         document.getElementById("cardUID").value = "Try again";
@@ -89,6 +93,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  ////////////////////////////////
+  // EVENT LISTENERS
+  ////////////////////////////////
+
   // Sending connectSerialPort function call on pressing connect
   connectCOM.addEventListener("click", (event) => {
     event.preventDefault()
@@ -112,5 +120,4 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault()
     sendCommand("/startLibraryKeystroke/0")
   });
-
 });

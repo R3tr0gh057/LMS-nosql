@@ -17,6 +17,18 @@ stop_write_command = ":"
 last_read_data = ""
 last_read_uid = ""
 
+# Global variable for the library version
+id_serial_port = None
+book_serial_port = None
+id_thread = None
+book_thread = None
+stop_threads = False
+
+id_data = ""
+book_data = ""
+
+
+
 # Global variables to store keystroke status
 keystrokeStatus = False
 
@@ -91,6 +103,38 @@ if ser is not None:
     thread = threading.Thread(target=read_from_serial)
     thread.daemon = True
     thread.start()
+
+###################
+# Library functions
+###################
+
+# Function to handle reading data from the ID card serial port
+def read_id_data():
+    global stop_threads, id_serial_port, id_data
+    while not stop_threads:
+        try:
+            if id_serial_port and id_serial_port.is_open:
+                data = id_serial_port.readline().decode('utf-8').strip()
+                print("ID Data read:", data)
+                id_data = data  # Update the latest ID card data
+        except serial.SerialException as e:
+            print("Error reading from ID serial port:", e)
+            break
+
+# Function to handle reading data from the Book Reader serial port
+def read_book_data():
+    global stop_threads, book_serial_port, book_data
+    while not stop_threads:
+        try:
+            if book_serial_port and book_serial_port.is_open:
+                data = book_serial_port.readline().decode('utf-8').strip()
+                print("Book Data read:", data)
+                book_data = data  # Update the latest Book Reader data
+        except serial.SerialException as e:
+            print("Error reading from Book serial port:", e)
+            break
+
+
 
 # Main page
 @app.route('/')
@@ -183,6 +227,76 @@ def keystrokeMode(data):
     if keystrokeStatus:
         threading.Thread(target=keystroke_function).start()
     return jsonify({'status': 'received'})
+
+##############
+# LIBRARY
+##############
+
+@app.route('/library')
+def index():
+    return render_template('library.html')
+
+@app.route('/libraryPortConnect', methods=['POST'])
+def connect_ports():
+    global id_serial_port, book_serial_port, id_thread, book_thread
+    data = request.json
+
+    id_port_name = data.get('IdPport')
+    book_port_name = data.get('BookPort')
+
+    try:
+        # Establish connections to both serial ports
+        id_serial_port = serial.Serial(id_port_name, baudrate=9600, timeout=1)
+        book_serial_port = serial.Serial(book_port_name, baudrate=115200, timeout=1)
+
+        # Start threads to handle data reading
+        stop_threads = False
+
+        id_thread = threading.Thread(target=read_id_data)
+        book_thread = threading.Thread(target=read_book_data)
+
+        id_thread.start()
+        book_thread.start()
+
+        return jsonify({'success': True})
+    except serial.SerialException as e:
+        return jsonify({'success': False, 'error': str(e)})
+    
+@app.route('/startLibraryKeystroke/<int:state>', methods=['POST'])
+def start_keystroke(state):
+    global stop_threads
+
+    if state == 1:  # Start keystroke
+        stop_threads = False
+        return jsonify({'status': 'Keystroke threads running'})
+    elif state == 0:  # Stop keystroke
+        stop_threads = True
+        if id_thread is not None:
+            id_thread.join()
+        if book_thread is not None:
+            book_thread.join()
+        return jsonify({'status': 'Keystroke threads stopped'})
+    else:
+        return jsonify({'status': 'Invalid state'})
+    
+def break_connection():
+    global id_serial_port, book_serial_port, stop_threads
+
+    stop_threads = True
+    if id_serial_port and id_serial_port.is_open:
+        id_serial_port.close()
+    if book_serial_port and book_serial_port.is_open:
+        book_serial_port.close()
+
+    return jsonify({'status': 'Connections terminated'})
+
+@app.route('/LibraryGetReadData', methods=['GET'])
+def get_read_data():
+    # Return the latest data from both Arduinos
+    return jsonify({
+        'id_data': id_data,
+        'book_data': book_data
+    })
 
 if __name__ == '__main__':
     app.run()
