@@ -102,8 +102,8 @@ void printData() {
       // Read data from the block
       status = rfid.MIFARE_Read(blockAddr, buffer, &size);
       if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("MIFARE_Read() failed: "));
-        Serial.println(rfid.GetStatusCodeName(status));
+        // Serial.print(F("MIFARE_Read() failed: "));
+        // Serial.println(rfid.GetStatusCodeName(status));
       } else {
         // Print data from the block
         String readData = "";
@@ -129,9 +129,8 @@ void printData() {
 
       rfid.PICC_HaltA();
       rfid.PCD_StopCrypto1();
-    }
 
-    if (Serial.available() > 0) {
+      if (Serial.available() > 0) {
       char command = Serial.read();
       if (command == '_') {
         break;
