@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
       //   // document.getElementById("cardUID").value = result.uid;
       //   document.getElementById("cardData").value = result.data;
       // }
-
       IDcard.value = result.id_data;
       Book.value = result.book_data;      
 
