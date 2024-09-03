@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   const startKeystrokeBtn = document.getElementById("startKeystroke");
   const stopKeystrokeBtn = document.getElementById("stopKeystroke");
+  const connectCOM = document.getElementById("connectCOM");
+  const disconnectCOM = document.getElementById("disconnectCOM");
 
   // Universal function to fetch endpoints
   async function sendCommand(url) {
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // upon selecting the ports and pressing connect, send the serialports and start the listener
+  // Upon selecting the ports and pressing connect, send the serialports and start the listener
   function connectSerialPort() {
     const IDcomPort = document.getElementById('IDport').value;
     const BookcomPort = document.getElementById('BookPort').value;
@@ -86,6 +88,18 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error('Error:', error);
       });
   }
+
+  // Sending connectSerialPort function call on pressing connect
+  connectCOM.addEventListener("click", (event) => {
+    event.preventDefault()
+    connectSerialPort()
+  });
+
+  // Fetch endpoint to terminate both the threads that are running
+  disconnectCOM.addEventListener("click", (event) => {
+    event.preventDefault()
+    sendCommand("/breakConnection")
+  });
 
   // Fetch endpoint to start the keystrokes thread
   startKeystrokeBtn.addEventListener("click", (event) => {
