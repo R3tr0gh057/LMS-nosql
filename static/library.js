@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const stopKeystrokeBtn = document.getElementById("stopKeystroke");
   const connectCOM = document.getElementById("connectCOM");
   const disconnectCOM = document.getElementById("disconnectCOM");
+  const IDcard = document.getElementById("idCardData");
+  const Book = document.getElementById("bookData");
 
   ////////////////////////////
   // FUNCTION DEFINITIONS
@@ -27,16 +29,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // Update read data function call
   async function getReadData() {
     try {
-      const response = await fetch("/LibraryGetReadData");
+      const response = await fetch("/getReadData");
       const result = await response.json();
-      if (result.data == "PCD_Authenticate() failed: Error in communication." || result.data == "PCD_Authenticate() failed: Timeout in communication." || result.data == "MIFARE_Read() failed: The CRC_A does not match.") {
-        document.getElementById("cardUID").value = "Try again";
-        await sendCommand("/startRead");
-      }
-      else {
-        // document.getElementById("cardUID").value = result.uid;
-        document.getElementById("cardData").value = result.data;
-      }
+      // if (result.data == "PCD_Authenticate() failed: Error in communication." || result.data == "PCD_Authenticate() failed: Timeout in communication." || result.data == "MIFARE_Read() failed: The CRC_A does not match.") {
+      //   document.getElementById("cardUID").value = "Try again";
+      //   await sendCommand("/startLibraryKeystroke/1");
+      // }
+      // else {
+      //   // document.getElementById("cardUID").value = result.uid;
+      //   document.getElementById("cardData").value = result.data;
+      // }
+
+      IDcard.value = result.id_data;
+      Book.value = result.book_data;      
 
     } catch (error) {
       console.error("Error fetching read data:", error);
@@ -91,8 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
           startKeystrokeBtn.disabled = false;
           stopKeystrokeBtn.disabled = false;
 
-          serialSelectBtn.classList.add("active");
-          serialSelectBtn.textContent = "Connection Established";
+          connectCOM.classList.add("active");
+          connectCOM.textContent = "Connection Established";
 
           alert('Connected to ' + IDcomPort + ' and ' + BookcomPort);
         } else {
@@ -118,6 +123,8 @@ document.addEventListener("DOMContentLoaded", function () {
   disconnectCOM.addEventListener("click", (event) => {
     event.preventDefault()
     sendCommand("/breakConnection")
+    connectCOM.classList.remove("active");
+    connectCOM.textContent = "Connect";
   });
 
   // Fetch endpoint to start the keystrokes thread
