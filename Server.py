@@ -4,8 +4,12 @@ import threading
 import time
 import pyautogui
 import serial.tools.list_ports
+from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 ser = None
 
 read_command = "-"
@@ -25,6 +29,12 @@ def serial_write(command):
     if ser:
         ser.write(command.encode())
         print(f"Command sent to serial: {command}")
+
+# Making it so that instead of endpoint calls every 0.5 seconds, it updates id data dynamically using sockets
+def notify_id_change(new_id):
+    global id_data
+    id_data = new_id
+    socketio.emit('id_changed', {'new_id': new_id})
 
 # Function to read data from the serial port
 def read_from_serial():
@@ -53,6 +63,7 @@ def read_from_serial():
                 elif Data == "MIFARE_Read() failed: The CRC_A does not match.":
                     continue
                 else:
+                    notify_id_change(Data)
                     last_read_data = Data
                     print(f"Read Data: {last_read_data}")
 
@@ -183,6 +194,16 @@ def keystrokeMode(data):
     if keystrokeStatus:
         threading.Thread(target=keystroke_function).start()
     return jsonify({'status': 'received'})
+
+@app.route('/postData', methods=['POST'])
+def postData():
+    response = request.get_json()
+    if 'id' in response:
+        print(f"Received data: {response['id']}")
+        return jsonify({'received data': response['id']})
+    else:
+        print("post failed")
+        return jsonify({'status': "failed"})
 
 if __name__ == '__main__':
     app.run()

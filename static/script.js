@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("container");
 
   let status = false;
+  const socket = io()
 
   // Universal function to fetch endpoints
   async function sendCommand(url) {
@@ -197,8 +198,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Dynamic id data updation
+  socket.on('id_changed', function(data){
+    const updated_value = data.new_id;
+    document.getElementById("cardData").value = updated_value
+  })
+
   loadPorts()
-  setInterval(getReadData, 500);
+  // setInterval(getReadData, 500);
 
   // // Sending command to start reading at startup
   // sendCommand("/startRead");

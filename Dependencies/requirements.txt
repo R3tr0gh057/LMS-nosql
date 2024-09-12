@@ -1,3 +1,5 @@
 flask
 pyautogui
 pyserial
+flask_socketio
+flask-cors
